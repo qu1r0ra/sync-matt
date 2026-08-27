@@ -126,15 +126,15 @@ The **sync ritual** is the disciplined end-of-task state reconciliation sequence
 Print the formatted receipt:
 
 ```markdown
-## 🏁 Sync Receipt
+## Sync Receipt
 - **Git Commit**: `<hash>` — `<commit-subject>` (<Pushed to remote | Local only>)
-- **Verification**: ✅ Gate 1 (`<test-command>`) & Gate 2 (`<audit-command>`) passed
+- **Verification**: Gate 1 (`<test-command>`) & Gate 2 (`<audit-command>`) passed
 - **Tracker / Map Updates**:
   - Resolved: `[<Ticket Title>](<link>)`
   - Map Updated: `[<Map Name>](<link>)` (`## Decisions so far` appended)
 - **Staged Files**: `<count> files committed`
 
-### 🧭 Next Frontier (Ready to Take)
+### Next Frontier (Ready to Take)
 1. `[<Next Ticket 1 Title>](<link>)` — `<what to build>`
 2. `[<Next Ticket 2 Title>](<link>)` — `<what to build>`
 *(Or `None (Ad-hoc maintenance)`)*
