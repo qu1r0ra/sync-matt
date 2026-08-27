@@ -74,23 +74,42 @@ To ensure repository invariants and prevent split-brain state, `/sync` enforces 
 
 ---
 
+## 🚫 What `/sync` Does Not Do
+
+- **It is not an implementation or code generation skill.** It does not write application features or fix broken business logic. Use `/implement` or `/tdd` to build.
+- **It does not bypass failing verification gates.** If `pytest`, `npm test`, or `just test` fails, `/sync` halts immediately with **zero disk mutations** (Gate 1 fail-stop).
+- **It is not a replacement for `/handoff`.** `/sync` commits verified workspace changes, resolves tickets, and updates decision maps; `/handoff` packages deep in-flight conversational reasoning across separate agent sessions.
+- **It does not manufacture fake tickets.** In workspaces without an active Wayfinder map or issue tracker, it operates cleanly in **Ad-hoc / Maintenance mode**, updating glossaries (`CONTEXT.md`) or offering ADRs without polluting project state.
+- **It never commits credentials or reflection residue.** It strictly excludes reflection sessions (`.scratch/reflection-session/`), temporary logs, and credential patterns.
+
+---
+
 ## 📦 Installation & Setup
 
-### For Antigravity (Google DeepMind)
+### Option A: [skillshare](https://github.com/runkids/skillshare) (Recommended)
+
+```bash
+skillshare install qu1r0ra/sync-matt --track
+skillshare sync
+```
+
+### Option B: Manual Installation
+
+#### For Antigravity (Google DeepMind)
 Copy the skill folder into your Antigravity skills configuration:
 ```bash
 mkdir -p ~/.gemini/config/plugins/matt-pocock/skills/sync
 cp SKILL.md ~/.gemini/config/plugins/matt-pocock/skills/sync/SKILL.md
 ```
 
-### For Claude Code
+#### For Claude Code
 Copy into your project or user `.claude/skills/`:
 ```bash
 mkdir -p .claude/skills/sync
 cp SKILL.md .claude/skills/sync/SKILL.md
 ```
 
-### For Cursor / Codex / Generic Agent Environments
+#### For Cursor / Codex / Generic Agent Environments
 Reference `SKILL.md` directly in your `AGENTS.md` or `.cursorrules`:
 ```markdown
 - End of session / task sync: Read `.agents/skills/sync/SKILL.md` before committing or concluding.
