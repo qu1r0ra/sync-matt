@@ -1,8 +1,4 @@
-"""
-Behavioral and structural test suite for the Matt Pocock /sync skill.
-Validates frontmatter, lifecycle contracts, two-gate verification invariants,
-Wayfinder map reconciliation, and selective staging rules.
-"""
+"""Structural and behavioral tests for the packaged /sync skill."""
 
 import os
 import re
@@ -42,7 +38,7 @@ def test_frontmatter_validity(skill_content: str):
 
 def test_leading_words_present(skill_content: str):
     """Verify that all core leading words are defined and utilized."""
-    required_words = ["sync", "drain", "receipt", "frontier", "fog"]
+    required_words = ["sync", "land", "retire", "receipt", "frontier"]
     for word in required_words:
         assert f"**`{word}`**" in skill_content or f"`{word}`" in skill_content, (
             f"Missing required leading word: {word}"
@@ -50,25 +46,26 @@ def test_leading_words_present(skill_content: str):
 
 
 def test_all_seven_phases_present(skill_content: str):
-    """Verify that all 7 distinct phases of the sync lifecycle are documented."""
+    """Verify that the complete closeout lifecycle is documented."""
     required_phases = [
-        "1. Discover, Target & Disambiguate",
-        "2. Gate 1 — Code & Runtime Verification",
-        "3. Synthesize Answer & Reconcile Map / Tickets",
-        "4. Secret Scan & Intentional Staging",
-        "5. Gate 2 — Workspace Integrity & Link Audit",
-        "6. Atomic Git Commit, Remote API Close & Supervised Push",
-        "7. Emit Sync Receipt & Next Frontier",
+        "1. Discover and target",
+        "2. Gate 1 — verify the delivered work",
+        "3. Reconcile maps and local tracker projections",
+        "4. Land and retire implementations",
+        "5. Stage and audit reconciliation changes",
+        "6. Commit and publish",
+        "7. Update and close affected tickets",
+        "8. Emit the receipt and frontier",
     ]
     for phase in required_phases:
         assert phase in skill_content, f"Missing required lifecycle phase: {phase}"
 
 
 def test_two_gate_fail_stop_rules(skill_content: str):
-    """Verify that Gate 1 and Gate 2 fail-stop rules are explicitly specified."""
-    assert "Zero disk mutations occur before Gate 1 passes" in skill_content
-    assert "Gate 2 — Workspace Integrity & Link Audit" in skill_content
-    assert "unstage files" in skill_content.lower() or "revert phase 3" in skill_content.lower()
+    """Verify that verification precedes reconciliation and publication."""
+    assert "Gate 1 — verify the delivered work" in skill_content
+    assert "Stage and audit reconciliation changes" in skill_content
+    assert "stop before publication" in skill_content.lower()
 
 
 # ---------------------------------------------------------------------------
