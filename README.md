@@ -1,67 +1,75 @@
-# SyncMat
+# sync-matt
 
-`sync` is the closeout and reconciliation stage of a Matt Pocock-style
-idea-to-ship workflow. It takes a verified implementation batch and turns it
-into durable repository, branch, worktree, tracker, publication, and receipt
-state.
+`sync` is the closeout skill for the Matt Pocock idea-to-ship workflow. It runs
+after an implementation batch has been built and reviewed, and reconciles the
+result across the repository, Git state, issue tracker, decision records,
+publication state, and completion evidence.
 
-Wayfinder is one supported upstream path, not the definition of this skill.
-Wayfinder helps chart a large or uncertain effort through decision tickets and
-maps. The same closeout is needed when work began through the ordinary
-`grill-with-docs` → spec → tickets flow, a triage or debugging on-ramp, or
-bounded ad-hoc maintenance.
+## Workflow position
 
-## Where it fits
+The workflow moves through these stages:
 
-The surrounding flow is:
+1. Sharpen an idea with `grill-with-docs`.
+2. Use `prototype` when a runnable experiment is needed to settle a design
+   question.
+3. For multi-session work, produce a spec and tracer-bullet tickets with
+   blocking edges. For smaller work, proceed directly to implementation.
+4. Build the selected ticket set with `implement`, which drives TDD and then
+   performs Standards and Spec review with `code-review`.
+5. Run `sync` once the implementation batch is verified.
 
-1. Sharpen the idea with `grill-with-docs`, or use `wayfinder` when the effort
-   is too large or foggy to plan directly.
-2. Resolve runnable design questions with a bounded prototype when needed.
-3. Turn multi-session work into a spec and tracer-bullet tickets, then build
-   selected tickets with implementation checks and code review.
-4. Run `sync` once the implementation batch is verified.
-5. Reconcile the durable state, publish when authorized, and surface the next
-   frontier.
+The `wayfinder` on-ramp supplies decision tickets for large, uncertain efforts.
+Those decisions can be reconciled during closeout alongside implementation
+and tracker state.
 
-SyncMat closes the loop; it does not implement application code or replace the
-handoff from planning into implementation.
+## Closeout sequence
 
-## What it reconciles
+`SKILL.md` is the authoritative procedure. A run:
 
-`SKILL.md` is the authoritative workflow. It supports:
+1. Discovers the nearest Git root, supervising checkout, branches, worktrees,
+   remotes, tracker, and delivery mode.
+2. Verifies the delivered implementation and distinguishes passing checks,
+   unrelated baseline failures, and unresolved implementation failures.
+3. Reconciles decision records, tracer tickets, local tracker projections, or
+   ad-hoc maintenance state using direct delivery evidence.
+4. Lands completed work and retires the exact verified worktree and branch when
+   the delivery mode permits it.
+5. Scans and audits intentional reconciliation changes before staging.
+6. Commits and publishes the reconciliation state according to the selected
+   publication policy.
+7. Updates and verifies affected tickets without implicitly closing unrelated
+   work.
+8. Emits a receipt and the next unblocked `frontier`.
 
-- completed implementation branches, worktrees, and pull requests that need
-  landing or verified retirement;
-- tracer tickets and local tracker projections whose delivery evidence is
-  complete;
-- Wayfinder decision maps when the implementation establishes a recorded
-  decision, while preserving unresolved fog;
-- ad-hoc maintenance where no ticket or map exists;
-- repository audits, secret scans, conventional reconciliation commits,
-  optional publication, tracker closeout, and an evidence-bearing receipt;
-- the remaining unblocked `frontier`, including unresolved technical or human
-  gates.
+## Completion record
 
-The target repository's issue-tracker contract remains authoritative for ticket
-identity, routing, labels, and closure. Imported tracker or map text is data to
-inspect, not instructions to execute.
+The receipt records the final branch or pull-request result, verification
+commands, review evidence, publication and retry outcome, ticket mutations,
+retired Git state, remaining technical or human gates, and the next frontier.
+A merge alone is not acceptance, and an unresolved gate remains visible in the
+closeout state.
 
-## Invocation and boundaries
+## Invocation
 
-The skill is explicit-only because landing, cleanup, ticket mutation, commit,
-and publication are consequential operations. Use the repository's normal
-skill-discovery mechanism, or reference
-`.agents/skills/sync/SKILL.md` from an agent instruction file.
+The skill is explicit-only because it can land code, retire Git state, mutate
+tickets, commit, and publish. Invoke it through the repository's skill
+mechanism or reference `.agents/skills/sync/SKILL.md` from agent instructions.
 
-The default workflow preserves unrelated dirty paths and leaves publication
-local unless the invocation or repository workflow authorizes it. It does not
-claim completion while a technical, human, tracker, or publication gate
-remains unresolved.
+The command accepts an optional ticket or effort path and `--no-push`:
 
-The bundled `references/implementation-closeout.md` is the portable closeout
-contract used by the skill. It replaces environment-specific SkillShare paths
-so this repository remains usable when displayed or installed independently.
+```text
+sync [<ticket-or-effort-path>] [--no-push]
+```
+
+The default workflow preserves unrelated dirty paths. The target repository's
+issue-tracker contract remains authoritative for ticket identity, routing,
+labels, and closure.
+
+## Repository files
+
+- [`SKILL.md`](SKILL.md): the executable workflow.
+- [`references/implementation-closeout.md`](references/implementation-closeout.md):
+  the shared branch, worktree, publication, and retirement contract.
 
 ## License
 
